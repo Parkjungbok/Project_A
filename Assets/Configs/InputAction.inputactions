@@ -16,8 +16,17 @@
                 },
                 {
                     "name": "Jump",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "1b9e0ab4-4032-4898-b6df-61a774cea3f6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "lie",
+                    "type": "PassThrough",
+                    "id": "a6f65649-bbac-4dd5-9802-bd2bbb191d10",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -50,7 +59,7 @@
                 {
                     "name": "up",
                     "id": "e6f6a112-14e5-437f-817c-686d07571e1e",
-                    "path": "",
+                    "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -61,7 +70,7 @@
                 {
                     "name": "down",
                     "id": "bafdf091-a96f-40f8-9cba-c5fe73f1416f",
-                    "path": "",
+                    "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -90,6 +99,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "a6b6c29f-435b-4232-a911-e324436abddb",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "lie",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
