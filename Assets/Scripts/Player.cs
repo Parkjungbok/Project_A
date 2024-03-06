@@ -16,9 +16,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float maxXSpeed;
     [SerializeField] float maxYSpeed;
 
-    [Header("Jump")]
+    [Header("Jump")]    
     [SerializeField] float jumpSpeed;
     [SerializeField] LayerMask groundCheckLayer;
+    [SerializeField] ParticleSystem druk;
+    private bool isGrounded;
 
     private Vector2 moveDir;
 
@@ -60,9 +62,12 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        Vector2 velocity = rigid.velocity;
-        velocity.y = jumpSpeed;
-        rigid.velocity = velocity;
+        if ( isGrounded )
+        {
+            Vector2 velocity = rigid.velocity;
+            velocity.y = jumpSpeed;
+            rigid.velocity = velocity;
+        }
     }
 
     private void OnMove( InputValue value )
@@ -94,23 +99,26 @@ public class PlayerController : MonoBehaviour
 
     private void OnLie(InputValue value)
     {
-
+        
+        animator.SetBool("Lie", true);
     }
 
 
     private void OnTriggerEnter2D( Collider2D collision )
     {
-        if ( ( ( 1 << collision.gameObject.layer ) & groundCheckLayer ) != 0 )
+        if (groundCheckLayer.Contain(collision.gameObject.layer))
         {
-            
+            isGrounded = true;
+            animator.SetBool("IsGround", isGrounded);
         }
     }
 
     private void OnTriggerExit2D( Collider2D collision )
     {
-        if ( ( ( 1 << collision.gameObject.layer ) & groundCheckLayer ) != 0 )
+        if ( groundCheckLayer.Contain(collision.gameObject.layer) )
         {
-            
+            isGrounded = false;
+            animator.SetBool("IsGround", isGrounded);
         }
     }
 }
