@@ -22,20 +22,39 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float maxXSpeed;
     [SerializeField] float maxYSpeed;
 
+    [Header("Climbing")]    
+    [SerializeField] LayerMask climbingCheckLayer;
+    [SerializeField] float climbingSpeed;    
+    private bool isClimbing;
+
     [Header("Jump")]
     [SerializeField] float jumpSpeed;
     [SerializeField] LayerMask groundCheckLayer;
-    [SerializeField] LayerMask ceilingCheckLayer;
     [SerializeField] ParticleSystem druk;
+
     private bool isGrounded;
-    private bool isCeiling;
+
+
+    [Header("Weapon")]
+    [SerializeField] SpriteRenderer parentSpriteRenderer;
+    [SerializeField] SpriteRenderer childSpriteRenderer;
+    [SerializeField] Transform weaponRotation;
+
+
+
 
     private Vector2 moveDir;
 
+    private void Start()
+    {
+        
+    }
 
     private void FixedUpdate()
     {
-        Move();       
+        Move();
+        InheritFlip();
+        Climbing();        
     }
 
 
@@ -69,6 +88,13 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("YSpeed", rigid.velocity.y);
     }
 
+    private void Climbing()
+    {
+
+    }
+
+
+
     private void Jump()
     {
         if ( isGrounded )
@@ -78,8 +104,6 @@ public class PlayerController : MonoBehaviour
             rigid.velocity = velocity;
         }
     }
-
-    
 
     private void OnMove( InputValue value )
     {
@@ -104,7 +128,6 @@ public class PlayerController : MonoBehaviour
     {
         if ( value.isPressed )
         {
-            Debug.Log("มกวม");
             Jump();
         }
     }
@@ -140,9 +163,6 @@ public class PlayerController : MonoBehaviour
     private bool lying = false;
     private float lieStartTime;
 
-    
-
-
     private void OnAbove( InputValue value )
     {
         if ( value.isPressed )
@@ -158,18 +178,35 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnAttack( InputValue value )
-    {    
+    {
         if ( value.isPressed )
         {
-            animator.SetBool("Attack", true);
+            animator.SetTrigger("Attack");
+        }
+    }
+
+    private void OnClimbingUp( InputValue value )
+    {
+        if ( isClimbing && value.isPressed )
+        {
+            animator.SetBool("ClimbingUp", true);
         }
         else
         {
-            animator.SetBool("Attack", false);
+            animator.SetBool("ClimbingUp", false);
         }
-        
     }
 
+    private void InheritFlip()
+    {
+        if ( parentSpriteRenderer != null && childSpriteRenderer != null )
+        {
+            childSpriteRenderer.flipX = parentSpriteRenderer.flipX;
+            childSpriteRenderer.flipY = parentSpriteRenderer.flipY;
+        }
+
+        weaponRotation.localScale = new Vector3(parentSpriteRenderer.flipX ? -1f : 1f, weaponRotation.localScale.y, weaponRotation.localScale.z);
+    }
 
     private void OnTriggerEnter2D( Collider2D collision )
     {
@@ -182,11 +219,11 @@ public class PlayerController : MonoBehaviour
                 druk.Play();
             }
         }
-
-        if ( ceilingCheckLayer.Contain(collision.gameObject.layer))
+        if ( climbingCheckLayer.Contain(collision.gameObject.layer) )
         {
-            isCeiling = false;
-            animator.SetBool("IsCeiling", isCeiling);
+            isClimbing = true;
+            animator.SetBool("IsClimbing", isClimbing);
+            animator.SetBool("Above", false);
         }
     }
 
@@ -198,10 +235,11 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsGround", isGrounded);
         }
 
-        if ( ceilingCheckLayer.Contain(collision.gameObject.layer) )
+        if ( climbingCheckLayer.Contain(collision.gameObject.layer) )
         {
-            isCeiling = true;
-            animator.SetBool("IsCeiling", isCeiling);
+            isClimbing = false;
+            animator.SetBool("IsClimbing", isClimbing);
+            
         }
     }
 }
