@@ -34,13 +34,10 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded;
 
-
     [Header("Weapon")]
     [SerializeField] SpriteRenderer parentSpriteRenderer;
     [SerializeField] SpriteRenderer childSpriteRenderer;
     [SerializeField] Transform weaponRotation;
-
-
 
 
     private Vector2 moveDir;
@@ -85,7 +82,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        animator.SetFloat("YSpeed", rigid.velocity.y);
+        animator.SetFloat("YSpeed", rigid.velocity.y);        
     }
 
     private void Climbing()
@@ -107,16 +104,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnMove( InputValue value )
     {
+
+
         moveDir = value.Get<Vector2>();
         if ( moveDir.x < 0 )
         {
             render.flipX = true;
             animator.SetBool("Run", true);
+            animator.SetBool("Above", false);
         }
         else if ( moveDir.x > 0 )
         {
             render.flipX = false;
             animator.SetBool("Run", true);
+            animator.SetBool("Above", false);
         }
         else
         {
@@ -208,6 +209,8 @@ public class PlayerController : MonoBehaviour
         weaponRotation.localScale = new Vector3(parentSpriteRenderer.flipX ? -1f : 1f, weaponRotation.localScale.y, weaponRotation.localScale.z);
     }
 
+    private int climbingCount;
+
     private void OnTriggerEnter2D( Collider2D collision )
     {
         if ( groundCheckLayer.Contain(collision.gameObject.layer) )
@@ -222,11 +225,13 @@ public class PlayerController : MonoBehaviour
         if ( climbingCheckLayer.Contain(collision.gameObject.layer) )
         {
             isClimbing = true;
+            climbingCount++;
+            isClimbing = climbingCount > 0;
             animator.SetBool("IsClimbing", isClimbing);
             animator.SetBool("Above", false);
         }
     }
-
+    // 캐릭터 레이어마스크 그라운드체커
     private void OnTriggerExit2D( Collider2D collision )
     {
         if ( groundCheckLayer.Contain(collision.gameObject.layer) )
@@ -238,8 +243,9 @@ public class PlayerController : MonoBehaviour
         if ( climbingCheckLayer.Contain(collision.gameObject.layer) )
         {
             isClimbing = false;
-            animator.SetBool("IsClimbing", isClimbing);
-            
+            climbingCount--;
+            isClimbing = climbingCount > 0;
+            animator.SetBool("IsClimbing", isClimbing);            
         }
     }
 }

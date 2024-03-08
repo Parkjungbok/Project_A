@@ -7674,8 +7674,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterCheckLayer:
     serializedVersion: 2
-    m_Bits: 0
-  damage: 1
+    m_Bits: 128
+  damage: 5
   hitEffect: {fileID: 8545745632826993007, guid: 7234f7abb9558af4a9e842da0891229e, type: 3}
 --- !u!50 &2143645562
 Rigidbody2D:
