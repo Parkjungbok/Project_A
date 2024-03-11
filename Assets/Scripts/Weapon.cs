@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class Weapon : MonoBehaviour
 {
     [SerializeField] LayerMask monsterCheckLayer;
-    [SerializeField] int damage;
+    [SerializeField] int damage;    
     [SerializeField] ParticleSystem hitEffect;
 
     private bool monsterCheck;
