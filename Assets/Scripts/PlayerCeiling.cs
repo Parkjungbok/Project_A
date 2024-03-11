@@ -12,8 +12,8 @@ public class PlayerCeiling : MonoBehaviour
     [SerializeField] CapsuleCollider2D parentCollider;
 
     private bool isCeiling;
-    private int ceilingCount;    
-
+    private int ceilingCount;
+    
     private void OnTriggerEnter2D( Collider2D collision )
     {        
         if ( ceilingCheckLayer.Contain(collision.gameObject.layer) )
@@ -22,13 +22,7 @@ public class PlayerCeiling : MonoBehaviour
             isCeiling = true;
             ceilingCount++;
             isCeiling = ceilingCount > 0;
-            animator.SetBool("IsCeiling", isCeiling);
-            if ( isCeiling && parentCollider != null )
-            {                
-                parentCollider.offset = new Vector2(parentCollider.offset.x, -0.45f);
-                parentCollider.size = new Vector2(0.8f, 0.8f);
-                animator.SetBool("Lie", true);
-            }
+            animator.SetBool("IsCeiling", isCeiling);            
         }
     }
     
@@ -40,13 +34,7 @@ public class PlayerCeiling : MonoBehaviour
             isCeiling = false;
             ceilingCount--;
             isCeiling = ceilingCount > 0;
-            animator.SetBool("IsCeiling", isCeiling);
-            if ( isCeiling && parentCollider != null )
-            {
-                parentCollider.offset = new Vector2(parentCollider.offset.x, -0.15f);
-                parentCollider.size = new Vector2(1f, 1.6f);
-                animator.SetBool("Lie", false);
-            }
+            animator.SetBool("IsCeiling", isCeiling);            
         }
     }
 }

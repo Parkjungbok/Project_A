@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.HID;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamagable
 {
     [Header("Component")]
     [SerializeField] Rigidbody2D rigid;
@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera aboveCamera;
     [SerializeField] CinemachineVirtualCamera belowCamera;
     [SerializeField] CapsuleCollider2D collider;
+    [SerializeField] float hp;
 
     [Header("Move")]
     [SerializeField] float moveSpeed;
@@ -37,8 +38,8 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
 
     [Header("Lie")]
-    [SerializeField] GameObject childcollider;    
-       
+    [SerializeField] GameObject childcollider;
+
 
     [Header("Weapon")]
     [SerializeField] SpriteRenderer parentSpriteRenderer;
@@ -87,16 +88,25 @@ public class PlayerController : MonoBehaviour
 
     private void Climbing()
     {
-        
+
     }
 
-    private void Ceiling()
+    protected void StandDown()
     {
-
+        collider.offset = new Vector2(collider.offset.x, -0.45f);
+        collider.size = new Vector2(0.8f, 0.8f);
+        animator.SetBool("Lie", true);
     }
+    protected void StandUp()
+    {
+        collider.offset = new Vector2(collider.offset.x, -0.15f);
+        collider.size = new Vector2(1f, 1.6f);
+        animator.SetBool("Lie", false);
+    }
+
     private void Lie()
     {
-        
+
     }
 
     private void Jump()
@@ -146,16 +156,13 @@ public class PlayerController : MonoBehaviour
     {
         if ( value.isPressed )
         {
-            collider.offset = new Vector2(collider.offset.x, -0.45f);
-            collider.size = new Vector2(0.8f, 0.8f);
-            animator.SetBool("Lie", true);
+            StandDown();            
             //belowCamera.Priority = 11;
         }
+        
         else
         {
-            collider.offset = new Vector2(collider.offset.x, -0.15f);
-            collider.size = new Vector2(1f, 1.6f);
-            animator.SetBool("Lie", false);
+            StandUp();
             //belowCamera.Priority = 9;
         }
     }
@@ -272,5 +279,19 @@ public class PlayerController : MonoBehaviour
             rigid.bodyType = RigidbodyType2D.Dynamic;
         }        
     }
-    
+
+
+    private void Die()
+    {
+        
+    }
+
+    public void TakeDamage( int damage )
+    {
+        hp -= damage;
+        if ( hp <= 0 )
+        {
+            Debug.Log("Ä³¸¯ÅÍ»ç¸Á");
+        }
+    }
 }

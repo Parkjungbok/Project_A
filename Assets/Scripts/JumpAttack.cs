@@ -6,8 +6,7 @@ public class JumpAttack : MonoBehaviour
 {
     [SerializeField] LayerMask monsterCheckLayer;
     [SerializeField] int damage;
-    [SerializeField] Rigidbody2D rigid;
-    [SerializeField] ParticleSystem hitEffect;
+    [SerializeField] Rigidbody2D rigid;    
 
     private bool monsterCheck;
 
@@ -16,7 +15,7 @@ public class JumpAttack : MonoBehaviour
         if ( ( monsterCheckLayer.value & 1 << collision.gameObject.layer ) != 0 )
         {
             monsterCheck = true;
-            Debug.Log("맞음");
+            Debug.Log("몬스터를 밟음");
             IDamagable damagable = collision.GetComponent<IDamagable>();
             damagable?.TakeDamage(damage);
 
@@ -31,7 +30,7 @@ public class JumpAttack : MonoBehaviour
     {
         if ( ( monsterCheckLayer.value & 1 << collision.gameObject.layer ) != 0 )
         {
-            Debug.Log("안맞음");
+            Debug.Log("몬스터를 밟지 않음");
             monsterCheck = false;
         }
     }
