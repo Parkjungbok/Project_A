@@ -169,14 +169,14 @@ public class PlayerController : MonoBehaviour, IDamagable
             collider.offset = new Vector2(collider.offset.x, -0.545f);
             collider.size = new Vector2(0.8f, 0.8f);
             animator.SetBool("Lie", true);
-            //belowCamera.Priority = 11;
+            belowCamera.Priority = 11;
         }
         else
         {
             collider.offset = new Vector2(collider.offset.x, -0.15f);
             collider.size = new Vector2(1f, 1.6f);
             animator.SetBool("Lie", false);
-            //belowCamera.Priority = 9;
+            belowCamera.Priority = 9;
         }
     }
     // 위에 보기 입력
@@ -185,12 +185,12 @@ public class PlayerController : MonoBehaviour, IDamagable
         if ( value.isPressed )
         {
             animator.SetBool("Above", true);
-            //aboveCamera.Priority = 11;
+            aboveCamera.Priority = 11;
         }
         else
         {
             animator.SetBool("Above", false);
-            //aboveCamera.Priority = 9;
+            aboveCamera.Priority = 9;
         }
     }
     // 공격 입력
