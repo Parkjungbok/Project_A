@@ -19,7 +19,6 @@ public class JumpAttack : MonoBehaviour
             IDamagable damagable = collision.GetComponent<IDamagable>();
             damagable?.TakeDamage(damage);
 
-
             Vector2 velocity = rigid.velocity;
             velocity.y = 15;
             rigid.velocity = velocity;

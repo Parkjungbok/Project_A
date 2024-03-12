@@ -8,8 +8,8 @@ using UnityEngine.InputSystem;
 public class Weapon : MonoBehaviour
 {
     [SerializeField] LayerMask monsterCheckLayer;
-    [SerializeField] int damage;    
-    [SerializeField] ParticleSystem hitEffect;
+    [SerializeField] int damage;
+    
 
     private bool monsterCheck;
 
@@ -18,7 +18,7 @@ public class Weapon : MonoBehaviour
         if ( ( monsterCheckLayer.value & 1 << collision.gameObject.layer ) != 0 )
         {
             monsterCheck = true;
-            Debug.Log("맞음");
+            Debug.Log("무기맞음");
             IDamagable damagable = collision.GetComponent<IDamagable>();
             damagable?.TakeDamage(damage);
         }
@@ -28,7 +28,7 @@ public class Weapon : MonoBehaviour
     {
         if ( ( monsterCheckLayer.value & 1 << collision.gameObject.layer ) != 0 )
         {
-            Debug.Log("안맞음");
+            Debug.Log("무기안맞음");
             monsterCheck = false;
         }
     }
