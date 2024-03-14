@@ -44,12 +44,21 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] SpriteRenderer parentSpriteRenderer;
     [SerializeField] SpriteRenderer childSpriteRenderer;
     [SerializeField] Transform weaponRotation;
+    
 
     [Header("Damage")]
 
     [SerializeField] float hp;
-    [SerializeField] LayerMask damageLayer;    
-    
+    [SerializeField] LayerMask damageLayer;
+
+    [Header("Sound")]
+
+    [SerializeField] AudioClip jump;
+    [SerializeField] AudioClip attack;
+    [SerializeField] AudioClip jumpattack;
+    [SerializeField] AudioClip hit;
+    [SerializeField] AudioClip hitbrid;
+
     private bool isDamaged;
     private bool isInputBlocked;
 
@@ -118,13 +127,23 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     }
 
+    private void Attack()
+    {
+        if ( animator.GetBool("Above") != true )
+        {
+            Manager.Sound.PlaySFX(attack);
+            animator.SetTrigger("Attack");
+        }
+    }
+
     private void Jump()
     {
         if ( isGrounded )
         {
+            Manager.Sound.PlaySFX(jump);
             Vector2 velocity = rigid.velocity;
             velocity.y = jumpSpeed;
-            rigid.velocity = velocity;
+            rigid.velocity = velocity;            
         }
     }
     // 이동 입력
@@ -156,7 +175,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         if ( value.isPressed )
         {
             if ( !isInputBlocked )
-            {
+            {                
                 Jump();
             }
         }
@@ -198,7 +217,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         if ( value.isPressed )
         {
-            animator.SetTrigger("Attack");
+            Attack();
         }
     }
 
@@ -283,7 +302,6 @@ public class PlayerController : MonoBehaviour, IDamagable
             damageCount++;
             isDamaged = damageCount > 0;
             animator.SetTrigger("IsDamage");            
-            Debug.Log("날라가야겠지");
         }
     }
 
@@ -326,6 +344,9 @@ public class PlayerController : MonoBehaviour, IDamagable
             isDamaged = true;
             isInputBlocked = true;
             StartCoroutine(DisableInputForSeconds(2f)); // Disable input for 2 seconds
+            Manager.Sound.PlaySFX(hit);
+            Manager.Sound.PlaySFX(hitbrid);
+            
 
             hp -= damage;           
 
@@ -334,8 +355,9 @@ public class PlayerController : MonoBehaviour, IDamagable
                 Die();
             }
         }
+    }  
 
-    }
+
     private IEnumerator DisableInputForSeconds( float seconds )
     {
         yield return new WaitForSeconds(seconds);

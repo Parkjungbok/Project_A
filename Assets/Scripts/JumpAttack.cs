@@ -6,7 +6,8 @@ public class JumpAttack : MonoBehaviour
 {
     [SerializeField] LayerMask monsterCheckLayer;
     [SerializeField] int damage;
-    [SerializeField] Rigidbody2D rigid;    
+    [SerializeField] Rigidbody2D rigid;
+    [SerializeField] AudioClip jumpAttack;
 
     private bool monsterCheck;
 
@@ -18,6 +19,7 @@ public class JumpAttack : MonoBehaviour
             Debug.Log("몬스터를 밟음");
             IDamagable damagable = collision.GetComponent<IDamagable>();
             damagable?.TakeDamage(damage);
+            Manager.Sound.PlaySFX(jumpAttack);
 
             Vector2 velocity = rigid.velocity;
             velocity.y = 15;
