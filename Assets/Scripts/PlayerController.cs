@@ -1,10 +1,13 @@
 using Cinemachine;
+using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.HID;
+using static Gate;
 
 public class PlayerController : MonoBehaviour, IDamagable
 {
@@ -44,7 +47,10 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] SpriteRenderer parentSpriteRenderer;
     [SerializeField] SpriteRenderer childSpriteRenderer;
     [SerializeField] Transform weaponRotation;
-    
+
+    [Header("Gate")]
+    [SerializeField] LayerMask gateCheak;
+    private bool isGated;
 
     [Header("Damage")]
 
@@ -74,8 +80,9 @@ public class PlayerController : MonoBehaviour, IDamagable
         if ( !isInputBlocked )
         {
             Move();
-            InheritFlip();            
+            InheritFlip();
         }
+
     }
 
 
@@ -143,9 +150,16 @@ public class PlayerController : MonoBehaviour, IDamagable
             Manager.Sound.PlaySFX(jump);
             Vector2 velocity = rigid.velocity;
             velocity.y = jumpSpeed;
-            rigid.velocity = velocity;            
+            rigid.velocity = velocity;
         }
     }
+
+    public void InGate()
+    {
+        animator.SetTrigger("InGate");
+    }
+
+
     // 이동 입력
     private void OnMove( InputValue value )
     {
@@ -175,7 +189,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         if ( value.isPressed )
         {
             if ( !isInputBlocked )
-            {                
+            {
                 Jump();
             }
         }
@@ -215,11 +229,20 @@ public class PlayerController : MonoBehaviour, IDamagable
     // 공격 입력
     private void OnAttack( InputValue value )
     {
-        if ( value.isPressed )
+        Attack();
+    }
+
+    public void OnInStage( InputValue value )
+    {
+        if ( isGated )
         {
-            Attack();
+            InGate();
+        }
+        else
+        {
         }
     }
+
 
     //사다리 테스트---------------------------------------------------------------------
     /*
@@ -262,7 +285,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
     }
     */
-    
+
 
     // 무기방향 반전
     private void InheritFlip()
@@ -273,6 +296,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     private int groundCount;
     private int climbingCount;
     private int damageCount;
+    private int gateCount;
 
     private void OnTriggerEnter2D( Collider2D collision )
     {
@@ -301,8 +325,16 @@ public class PlayerController : MonoBehaviour, IDamagable
             isDamaged = true;
             damageCount++;
             isDamaged = damageCount > 0;
-            animator.SetTrigger("IsDamage");            
+            animator.SetTrigger("IsDamage");
         }
+        if ( gateCheak.Contain(collision.gameObject.layer) )
+        {
+            isGated = true;
+            gateCount++;
+            isGated = gateCount > 0;
+            animator.SetBool("IsGate", true);
+        }
+
     }
 
     private void OnTriggerExit2D( Collider2D collision )
@@ -314,7 +346,6 @@ public class PlayerController : MonoBehaviour, IDamagable
             isGrounded = groundCount > 0;
             animator.SetBool("IsGround", isGrounded);
         }
-
         if ( climbingCheckLayer.Contain(collision.gameObject.layer) )
         {
             isClimbing = false;
@@ -324,12 +355,18 @@ public class PlayerController : MonoBehaviour, IDamagable
             rigid.bodyType = RigidbodyType2D.Dynamic;
             animator.SetBool("IsGround", false);
         }
-
         if ( damageLayer.Contain(collision.gameObject.layer) )
         {
             isDamaged = false;
             damageCount--;
-            isDamaged = damageCount > 0;            
+            isDamaged = damageCount > 0;
+        }
+        if ( gateCheak.Contain(collision.gameObject.layer) )
+        {
+            isGated = true;
+            gateCount--;
+            isGated = gateCount > 0;
+            animator.SetBool("IsGate", false);
         }
     }
 
@@ -346,16 +383,16 @@ public class PlayerController : MonoBehaviour, IDamagable
             StartCoroutine(DisableInputForSeconds(2f)); // Disable input for 2 seconds
             Manager.Sound.PlaySFX(hit);
             Manager.Sound.PlaySFX(hitbrid);
-            
 
-            hp -= damage;           
+
+            hp -= damage;
 
             if ( hp <= 0 )
             {
                 Die();
             }
         }
-    }  
+    }
 
 
     private IEnumerator DisableInputForSeconds( float seconds )

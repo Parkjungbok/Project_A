@@ -10,7 +10,6 @@ public class Weapon : MonoBehaviour
     [SerializeField] LayerMask monsterCheckLayer;
     [SerializeField] int damage;
     
-
     private bool monsterCheck;
 
     private void OnTriggerEnter2D( Collider2D collision )

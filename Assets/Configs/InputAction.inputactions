@@ -43,7 +43,7 @@
                 },
                 {
                     "name": "Attack",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "4a975494-18fc-44ce-961c-f4c4e78d44ff",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -67,6 +67,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "InStage",
+                    "type": "Button",
+                    "id": "ad5278af-ab2f-4845-a827-acd44ff6520c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -166,6 +175,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ClimbingDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c8f33f61-e6be-4046-a39e-2d1a7a24a21a",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InStage",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
