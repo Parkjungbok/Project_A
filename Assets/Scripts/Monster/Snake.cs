@@ -19,6 +19,7 @@ public class Snake : MonoBehaviour, IDamagable
     [SerializeField] GameObject DieEffect;
 
     [Header("Sound")]
+    private bool attackCheck;
     [SerializeField] AudioClip attack;
     [SerializeField] AudioClip die;
 
@@ -57,7 +58,7 @@ public class Snake : MonoBehaviour, IDamagable
             case State.Attack:
                 AttackUpdate();
                 break;
-        }
+        }        
     }
 
     private void MoveUpdate()
@@ -133,26 +134,27 @@ public class Snake : MonoBehaviour, IDamagable
 
         if ( playerTransform.position.x - transform.position.x < 0 )
         {
-            render.flipX = true;
+            render.flipX = true;            
         }
         else
         {
-            render.flipX = false;
+            render.flipX = false;            
         }
 
         if ( Vector2.Distance(playerTransform.position, transform.position) > 2f )
         {
             animator.SetTrigger("Attack");
-            Manager.Sound.PlaySFX(attack);
+            attackCheck = true;
+            Debug.Log("attackCheck¿Â");
+            //attackCheck = false;
+            Debug.Log("attackCheck¿ÀÇÁ");
         }
 
         if ( Vector2.Distance(playerTransform.position, transform.position) > findRange )
         {
             curState = State.Return;
         }
-    }
-
-    
+    }        
 
     public void Move()
     {
@@ -185,8 +187,7 @@ public class Snake : MonoBehaviour, IDamagable
     }
 
     private void Die()
-    {
-        
+    {        
         GameObject deathEffect = Instantiate(DieEffect, transform.position, Quaternion.identity);
         
         Destroy(gameObject);

@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 14129829}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CreatePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6690,7 +6690,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 748390471}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CreatePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6722,7 +6722,7 @@ GameObject:
   m_Component:
   - component: {fileID: 817521573}
   - component: {fileID: 817521574}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: img_Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6793,7 +6793,7 @@ SpriteRenderer:
   m_Size: {x: 0.32813752, y: 0.4375}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &828463406
@@ -6867,7 +6867,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextPositionType: 1
-  DestinationPoint: {fileID: 14129829}
+  destinationPoint: {fileID: 0}
   player: {fileID: 839695744}
   check: {fileID: 828463410}
   layer:
@@ -7170,6 +7170,7 @@ MonoBehaviour:
   gateCheak:
     serializedVersion: 2
     m_Bits: 1024
+  usingTheGate: 0
   hp: 500
   damageLayer:
     serializedVersion: 2
@@ -7345,7 +7346,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 907080437}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Gate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34045,7 +34046,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextPositionType: 1
-  DestinationPoint: {fileID: 748390471}
+  destinationPoint: {fileID: 0}
   player: {fileID: 839695744}
   check: {fileID: 1172845356}
   layer:
@@ -35187,7 +35188,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2077611245}
   - component: {fileID: 2077611246}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: img_Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35258,7 +35259,7 @@ SpriteRenderer:
   m_Size: {x: 0.32813752, y: 0.4375}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1001 &2089587845
@@ -35533,6 +35534,10 @@ PrefabInstance:
       propertyPath: DieEffect
       value: 
       objectReference: {fileID: 3249548820737513307, guid: 9a2ced697f5bce34fa16d5bedd3d2403, type: 3}
+    - target: {fileID: 608101654014854598, guid: 5ee0ec24e56797149814956b62cf0898, type: 3}
+      propertyPath: attackRange
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1603384920290276652, guid: 5ee0ec24e56797149814956b62cf0898, type: 3}
       propertyPath: m_IsTrigger
       value: 0

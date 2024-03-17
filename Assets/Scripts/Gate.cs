@@ -10,14 +10,39 @@ public class Gate : MonoBehaviour
         InitPosition, SomePosiotion
     };
     public NextPositionType nextPositionType;
-    public Transform DestinationPoint;
+    public Transform destinationPoint;
 
     [SerializeField] GameObject player;
     [SerializeField] BoxCollider2D check;
     [SerializeField] LayerMask layer;
     [SerializeField] Animator ani;
 
-    private bool cheak;
+    private bool cheak;    
+
+
+    public void UsingtheGate( Collider2D collision )
+    {
+        if( FindObjectOfType<PlayerController>().usingTheGate == true )
+        {
+            Debug.Log("작동확인1");
+        }
+        Debug.Log("작동확인2");
+        if ( cheak == true && FindObjectOfType<PlayerController>().usingTheGate == true )
+        {
+            if ( nextPositionType == NextPositionType.InitPosition )
+            {
+                collision.transform.position = Vector3.zero;
+            }
+            else if ( nextPositionType == NextPositionType.SomePosiotion )
+            {
+                collision.transform.position = destinationPoint.position;
+            }
+            else
+            {
+                // 다른 경우에 대한 처리
+            }
+        }
+    }
 
     private void OnTriggerEnter2D( Collider2D collision )
     {
@@ -25,23 +50,6 @@ public class Gate : MonoBehaviour
         {
             ani.SetBool("Cheak", true);
             cheak = true;
-            // 플레이어가 버튼을 발동했는지 확인
-
-
-            if ( player.GetComponent<PlayerController>())
-            {
-                if ( nextPositionType == NextPositionType.InitPosition )
-                {
-                    collision.transform.position = Vector3.zero;
-                }
-                else if ( nextPositionType == NextPositionType.SomePosiotion )
-                {
-                    collision.transform.position = DestinationPoint.position;
-                }
-                else
-                {                    
-                }
-            }
         }
     }
 

@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [Header("Gate")]
     [SerializeField] LayerMask gateCheak;
     private bool isGated;
+    public bool usingTheGate;
 
     [Header("Damage")]
 
@@ -156,6 +157,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     public void InGate()
     {
+        usingTheGate = true;
         animator.SetTrigger("InGate");
     }
 
@@ -234,8 +236,9 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     public void OnInStage( InputValue value )
     {
+        
         if ( isGated )
-        {
+        {            
             InGate();
         }
         else
