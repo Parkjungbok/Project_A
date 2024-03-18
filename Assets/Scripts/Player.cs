@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour , IDamagable
 {
     [SerializeField] int hp;
-    [SerializeField] CapsuleCollider2D collider;
+    
     [SerializeField] Animator animator;
 
     private void Die()

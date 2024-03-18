@@ -19,14 +19,11 @@ public class PlayerCeiling : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (ceilingCheckLayer.Contain(collision.gameObject.layer))
-        {
-            Debug.Log("머리가닿았다");
+        {            
             isCeiling = true;
             ceilingCount++;
             isCeiling = ceilingCount > 0;
-            animator.SetBool("IsCeiling", isCeiling);
-            
-            
+            animator.SetBool("IsCeiling", isCeiling);            
         }
     }
     
@@ -34,13 +31,10 @@ public class PlayerCeiling : MonoBehaviour
     {        
         if ( ceilingCheckLayer.Contain(collision.gameObject.layer) )
         {
-            Debug.Log("머리가떨어졌다");
             isCeiling = false;
             ceilingCount--;
             isCeiling = ceilingCount > 0;
-            animator.SetBool("IsCeiling", isCeiling);         
-            
-            
+            animator.SetBool("IsCeiling", isCeiling);            
         }
     }
 }

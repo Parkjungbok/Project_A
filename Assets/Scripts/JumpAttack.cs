@@ -9,13 +9,11 @@ public class JumpAttack : MonoBehaviour
     [SerializeField] Rigidbody2D rigid;
     [SerializeField] AudioClip jumpAttack;
 
-    private bool monsterCheck;
-
     private void OnTriggerEnter2D( Collider2D collision )
     {
         if ( ( monsterCheckLayer.value & 1 << collision.gameObject.layer ) != 0 )
         {
-            monsterCheck = true;
+            
             Debug.Log("몬스터를 밟음");
             IDamagable damagable = collision.GetComponent<IDamagable>();
             damagable?.TakeDamage(damage);
@@ -31,8 +29,7 @@ public class JumpAttack : MonoBehaviour
     {
         if ( ( monsterCheckLayer.value & 1 << collision.gameObject.layer ) != 0 )
         {
-            Debug.Log("몬스터를 밟지 않음");
-            monsterCheck = false;
+            
         }
     }
 }
