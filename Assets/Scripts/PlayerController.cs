@@ -1,13 +1,7 @@
 using Cinemachine;
-using JetBrains.Annotations;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.HID;
-using static Gate;
 
 public class PlayerController : MonoBehaviour, IDamagable
 {
@@ -43,6 +37,10 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] GameObject childcollider;
     private PlayerCeiling childScriptReference;
 
+    [Header("Die")]
+    [SerializeField] Transform reStartPoint;
+    //private GameObject collisioncheak;
+
     [Header("Weapon")]
     [SerializeField] SpriteRenderer parentSpriteRenderer;
     [SerializeField] SpriteRenderer childSpriteRenderer;
@@ -52,6 +50,9 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] LayerMask gateCheak;
     private bool isGated;
     public bool usingTheGate;
+    private bool isTransformLocked = false;
+    private Vector3 lockedPosition;
+    [SerializeField] GameObject fade;
 
     [Header("Damage")]
 
@@ -65,6 +66,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] AudioClip jumpattack;
     [SerializeField] AudioClip hit;
     [SerializeField] AudioClip hitbrid;
+
+    [SerializeField] Animator fadeAnimator;
 
     private bool isDamaged;
     private bool isInputBlocked;
@@ -82,6 +85,10 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             Move();
             InheritFlip();
+            if ( isTransformLocked )
+            {
+                transform.position = lockedPosition;
+            }
         }
 
     }
@@ -111,6 +118,11 @@ public class PlayerController : MonoBehaviour, IDamagable
             Vector2 velocity = rigid.velocity;
             velocity.y = -maxYSpeed;
             rigid.velocity = velocity;
+        }
+
+        if ( isTransformLocked )
+        {
+            moveDir.x = 0;
         }
 
         animator.SetFloat("XSpeed", rigid.velocity.x);
@@ -148,10 +160,17 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         if ( isGrounded )
         {
-            Manager.Sound.PlaySFX(jump);
-            Vector2 velocity = rigid.velocity;
-            velocity.y = jumpSpeed;
-            rigid.velocity = velocity;
+            if ( isTransformLocked )
+            {
+                Debug.Log("점프앙대");
+            }
+            else
+            {
+                Manager.Sound.PlaySFX(jump);
+                Vector2 velocity = rigid.velocity;
+                velocity.y = jumpSpeed;
+                rigid.velocity = velocity;
+            }
         }
     }
 
@@ -160,7 +179,18 @@ public class PlayerController : MonoBehaviour, IDamagable
         usingTheGate = true;
         animator.SetTrigger("InGate");
     }
-
+    public void FadeIn()
+    {
+        fadeAnimator.SetBool("FadeIn", true);
+        fadeAnimator.SetBool("FadeOut", false);
+        fade.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+    }
+    public void FadeOut()
+    {
+        fadeAnimator.SetBool("FadeIn", false);
+        fadeAnimator.SetBool("FadeOut", true);
+        fade.transform.localScale = new Vector3(50f, 50f, 50f);
+    }
 
     // 이동 입력
     private void OnMove( InputValue value )
@@ -236,16 +266,32 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     public void OnInStage( InputValue value )
     {
-        
         if ( isGated )
-        {            
+        {
             InGate();
         }
         else
         {
+            Debug.Log("테스트 게이트2");
         }
     }
-
+    public void LockCharacterTransform()
+    {
+        if ( !isTransformLocked )
+        {
+            isTransformLocked = true;
+            lockedPosition = transform.position;
+            FadeIn();
+        }
+    }
+    public void UnlockCharacterTransform()
+    {
+        if ( isTransformLocked )
+        {
+            isTransformLocked = false;
+            FadeOut();
+        }
+    }
 
     //사다리 테스트---------------------------------------------------------------------
     /*
@@ -375,8 +421,12 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void Die()
     {
-        Destroy(gameObject);
+        transform.position = reStartPoint.position;
+        FindObjectOfType<PlayerController>().usingTheGate = false;
+        hp = 30;
     }
+
+
     public void TakeDamage( int damage )
     {
         if ( !isDamaged )
@@ -396,8 +446,6 @@ public class PlayerController : MonoBehaviour, IDamagable
             }
         }
     }
-
-
     private IEnumerator DisableInputForSeconds( float seconds )
     {
         yield return new WaitForSeconds(seconds);

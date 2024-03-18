@@ -57,7 +57,7 @@ public class SceneManager : Singleton<SceneManager>
         Manager.UI.EnsureEventSystem();
 
         BaseScene curScene = GetCurScene();
-        yield return curScene.LoadingRoutine();
+        //yield return curScene.LoadingRoutine();
 
         loadingBar.gameObject.SetActive(false);
         Time.timeScale = 1f;

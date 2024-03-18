@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Gate : MonoBehaviour
@@ -17,31 +15,42 @@ public class Gate : MonoBehaviour
     [SerializeField] LayerMask layer;
     [SerializeField] Animator ani;
 
-    private bool cheak;    
+    private bool cheak;
+    private GameObject collisioncheak;
+    private Coroutine gateCoroutine;
 
-
-    public void UsingtheGate( Collider2D collision )
+    private void Update()
     {
-        if( FindObjectOfType<PlayerController>().usingTheGate == true )
-        {
-            Debug.Log("작동확인1");
-        }
-        Debug.Log("작동확인2");
+        UsingtheGate();
+    }
+
+
+    private IEnumerator MoveCharacter( Vector3 destination )
+    {
+        FindObjectOfType<PlayerController>().LockCharacterTransform();
+        yield return new WaitForSeconds(1f);
+        collisioncheak.transform.position = destination;
+        FindObjectOfType<PlayerController>().usingTheGate = false;
+        FindObjectOfType<PlayerController>().UnlockCharacterTransform();
+        gateCoroutine = null;
+    }
+
+    public void UsingtheGate()
+    {
         if ( cheak == true && FindObjectOfType<PlayerController>().usingTheGate == true )
         {
-            if ( nextPositionType == NextPositionType.InitPosition )
+            if ( nextPositionType == NextPositionType.SomePosiotion )
             {
-                collision.transform.position = Vector3.zero;
-            }
-            else if ( nextPositionType == NextPositionType.SomePosiotion )
-            {
-                collision.transform.position = destinationPoint.position;
+                if ( gateCoroutine == null )
+                {
+                    gateCoroutine = StartCoroutine(MoveCharacter(destinationPoint.position));
+                }
             }
             else
             {
-                // 다른 경우에 대한 처리
             }
         }
+
     }
 
     private void OnTriggerEnter2D( Collider2D collision )
@@ -50,6 +59,7 @@ public class Gate : MonoBehaviour
         {
             ani.SetBool("Cheak", true);
             cheak = true;
+            collisioncheak = collision.gameObject;
         }
     }
 
@@ -60,6 +70,17 @@ public class Gate : MonoBehaviour
         {
             ani.SetBool("Cheak", false);
             cheak = false;
+            collisioncheak = collision.gameObject;
         }
     }
 }
+
+
+/*  //추후 사망시 시작지점 위치때 사용
+if ( nextPositionType == NextPositionType.InitPosition )
+{
+   collisioncheak.transform.position = Vector3.zero;
+   FindObjectOfType<PlayerController>().usingTheGate = false;
+}
+*/
+

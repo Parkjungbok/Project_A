@@ -1,15 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Weapon : MonoBehaviour
 {
     [SerializeField] LayerMask monsterCheckLayer;
     [SerializeField] int damage;
-    
+
     private bool monsterCheck;
 
     private void OnTriggerEnter2D( Collider2D collision )
