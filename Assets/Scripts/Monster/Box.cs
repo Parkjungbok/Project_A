@@ -13,7 +13,7 @@ public class Box : MonoBehaviour , IDamagable
     private void Die()
     {
         GameObject deathEffect = Instantiate(dieEffect, transform.position, Quaternion.identity);
-        Destroy(gameObject,1f);
+        Destroy(gameObject);
         float randomValue = Random.value;
         if ( randomValue <= 0.33f )
         {

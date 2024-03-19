@@ -120,7 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackMoveSpeed: 2.5
   moveSpeed: 0
-  findRange: 4
+  findRange: 3
   attackRange: 2
   hp: 10
   rigid: {fileID: 6342332155866305827}
@@ -128,6 +128,8 @@ MonoBehaviour:
   animator: {fileID: 9154365984681385555}
   render: {fileID: 3231710170743850374}
   DieEffect: {fileID: 2744404597969077746, guid: d193e8a5a4fec6e45b51192fc40c912a, type: 3}
+  attack: {fileID: 0}
+  die: {fileID: 0}
 --- !u!50 &6342332155866305827
 Rigidbody2D:
   serializedVersion: 4

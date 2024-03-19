@@ -294,7 +294,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     }
 
     //사다리 테스트---------------------------------------------------------------------
-    /*
+    
     private void OnClimbingUp( InputValue value )
     {
         if ( isClimbing && value.isPressed )
@@ -333,8 +333,8 @@ public class PlayerController : MonoBehaviour, IDamagable
             animator.SetBool("ClimbingDown", false);            
         }
     }
-    */
-
+    
+    
 
     // 무기방향 반전
     private void InheritFlip()
@@ -421,6 +421,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void Die()
     {
+        
         transform.position = reStartPoint.position;
         FindObjectOfType<PlayerController>().usingTheGate = false;
         hp = 30;
@@ -442,6 +443,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
             if ( hp <= 0 )
             {
+                animator.SetTrigger("IsDamage");
                 Die();
             }
         }
